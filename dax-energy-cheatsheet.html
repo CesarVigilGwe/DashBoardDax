@@ -257,6 +257,82 @@
             box-shadow: var(--shadow-md);
         }
 
+        /* Components: Tables */
+        .table-card {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 720px;
+            color: var(--text-secondary);
+        }
+
+        .data-table thead th {
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.08), rgba(74, 222, 128, 0.05));
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border-color);
+            padding: 1rem;
+            text-align: left;
+            position: sticky;
+            top: 0;
+        }
+
+        .data-table tbody tr {
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table tbody tr:hover {
+            background-color: var(--bg-card-hover);
+        }
+
+        .data-table td {
+            padding: 1rem;
+            vertical-align: top;
+        }
+
+        .data-table code {
+            background: rgba(56, 189, 248, 0.08);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            color: var(--accent-blue);
+            font-weight: 700;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: rgba(148, 163, 184, 0.15);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .pill i {
+            color: var(--text-secondary);
+        }
+
+        .pill.filtro { background: rgba(59, 130, 246, 0.12); border-color: rgba(59, 130, 246, 0.25); }
+        .pill.iterador { background: rgba(234, 179, 8, 0.12); border-color: rgba(234, 179, 8, 0.25); }
+        .pill.relacion { background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.25); }
+        .pill.time { background: rgba(56, 189, 248, 0.12); border-color: rgba(56, 189, 248, 0.25); }
+        .pill.agregacion { background: rgba(250, 204, 21, 0.14); border-color: rgba(250, 204, 21, 0.25); }
+        .pill.logica { background: rgba(250, 160, 55, 0.14); border-color: rgba(250, 160, 55, 0.25); }
+        .pill.matematica { background: rgba(129, 140, 248, 0.16); border-color: rgba(129, 140, 248, 0.3); }
+
         /* Section Styling */
         .section {
             margin-bottom: 4rem;
@@ -1104,69 +1180,70 @@ SWITCH(TRUE(),
                     <p class="section-desc">Todas las funciones en un solo lugar.</p>
                 </div>
 
-                <div class="card" style="overflow-x: auto;">
-                    <table style="width: 100%; text-align: left; border-collapse: collapse;">
-                        <thead>
-                            <tr style="border-bottom: 2px solid var(--border-color);">
-                                <th style="padding: 1rem; color: var(--text-primary);">Función</th>
-                                <th style="padding: 1rem; color: var(--text-primary);">Tipo</th>
-                                <th style="padding: 1rem; color: var(--text-primary);">Descripción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="reference-table-body" style="color: var(--text-secondary);">
-                            <!-- Populated via JS potentially, or static for now -->
-                            <tr class="search-item" data-keywords="calculate filtro" style="border-bottom: 1px solid var(--border-color);">
-                                <td style="padding: 1rem;"><code class="text-blue">CALCULATE</code></td>
-                                <td style="padding: 1rem;">Filtro</td>
-                                <td style="padding: 1rem;">Evalúa expresión en contexto modificado.</td>
-                            </tr>
-                            <tr class="search-item" data-keywords="sumx iterador" style="border-bottom: 1px solid var(--border-color);">
-                                <td style="padding: 1rem;"><code class="text-blue">SUMX</code></td>
-                                <td style="padding: 1rem;">Iterador</td>
-                                <td style="padding: 1rem;">Suma resultados fila por fila.</td>
-                            </tr>
-                            <tr class="search-item" data-keywords="related relacion buscarv" style="border-bottom: 1px solid var(--border-color);">
-                                <td style="padding: 1rem;"><code class="text-blue">RELATED</code></td>
-                                <td style="padding: 1rem;">Relación</td>
-                                <td style="padding: 1rem;">Trae valor de tabla 'uno'.</td>
-                            </tr>
-                            <tr class="search-item" data-keywords="totalytd time inteligencia tiempo" style="border-bottom: 1px solid var(--border-color);">
-                                <td style="padding: 1rem;"><code class="text-blue">TOTALYTD</code></td>
-                                <td style="padding: 1rem;">Time Intel</td>
-                                <td style="padding: 1rem;">Acumulado anual hasta la fecha.</td>
-                            </tr>
-                            <tr class="search-item" data-keywords="divide division matematicas" style="border-bottom: 1px solid var(--border-color);">
-                                <td style="padding: 1rem;"><code class="text-blue">DIVIDE</code></td>
-                                <td style="padding: 1rem;">Matemática</td>
-                                <td style="padding: 1rem;">División segura (maneja div/0).</td>
-                            </tr>
-                            <tr class="search-item" data-keywords="switch logica condicional" style="border-bottom: 1px solid var(--border-color);">
-                                <td style="padding: 1rem;"><code class="text-blue">SWITCH</code></td>
-                                <td style="padding: 1rem;">Lógica</td>
-                                <td style="padding: 1rem;">Evaluación de múltiples condiciones.</td>
-                            </tr>
-                            <tr class="search-item" data-keywords="sameperiodlastyear time inteligencia tiempo yoy" style="border-bottom: 1px solid var(--border-color);">
-                                <td style="padding: 1rem;"><code class="text-blue">SAMEPERIODLASTYEAR</code></td>
-                                <td style="padding: 1rem;">Time Intel</td>
-                                <td style="padding: 1rem;">Mismo rango de fechas año anterior.</td>
-                            </tr>
-                            <tr class="search-item" data-keywords="sum suma agregacion" style="border-bottom: 1px solid var(--border-color);">
-                                <td style="padding: 1rem;"><code class="text-blue">SUM</code></td>
-                                <td style="padding: 1rem;">Agregación</td>
-                                <td style="padding: 1rem;">Suma valores de una columna.</td>
-                            </tr>
-                            <tr class="search-item" data-keywords="average promedio agregacion" style="border-bottom: 1px solid var(--border-color);">
-                                <td style="padding: 1rem;"><code class="text-blue">AVERAGE</code></td>
-                                <td style="padding: 1rem;">Agregación</td>
-                                <td style="padding: 1rem;">Promedio aritmético.</td>
-                            </tr>
-                            <tr class="search-item" data-keywords="filter filtro tabla" style="border-bottom: 1px solid var(--border-color);">
-                                <td style="padding: 1rem;"><code class="text-blue">FILTER</code></td>
-                                <td style="padding: 1rem;">Filtro</td>
-                                <td style="padding: 1rem;">Retorna tabla filtrada.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="card table-card">
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Función</th>
+                                    <th>Tipo</th>
+                                    <th>Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reference-table-body">
+                                <tr class="search-item" data-keywords="calculate filtro">
+                                    <td><code class="text-blue">CALCULATE</code></td>
+                                    <td><span class="pill filtro"><i class="fa-solid fa-filter"></i>Filtro</span></td>
+                                    <td>Evalúa expresión en contexto modificado.</td>
+                                </tr>
+                                <tr class="search-item" data-keywords="sumx iterador">
+                                    <td><code class="text-blue">SUMX</code></td>
+                                    <td><span class="pill iterador"><i class="fa-solid fa-forward"></i>Iterador</span></td>
+                                    <td>Suma resultados fila por fila.</td>
+                                </tr>
+                                <tr class="search-item" data-keywords="related relacion buscarv">
+                                    <td><code class="text-blue">RELATED</code></td>
+                                    <td><span class="pill relacion"><i class="fa-solid fa-link"></i>Relación</span></td>
+                                    <td>Trae valor de tabla 'uno'.</td>
+                                </tr>
+                                <tr class="search-item" data-keywords="totalytd time inteligencia tiempo">
+                                    <td><code class="text-blue">TOTALYTD</code></td>
+                                    <td><span class="pill time"><i class="fa-regular fa-clock"></i>Time Intel</span></td>
+                                    <td>Acumulado anual hasta la fecha.</td>
+                                </tr>
+                                <tr class="search-item" data-keywords="divide division matematicas">
+                                    <td><code class="text-blue">DIVIDE</code></td>
+                                    <td><span class="pill matematica"><i class="fa-solid fa-square-root-variable"></i>Matemática</span></td>
+                                    <td>División segura (maneja div/0).</td>
+                                </tr>
+                                <tr class="search-item" data-keywords="switch logica condicional">
+                                    <td><code class="text-blue">SWITCH</code></td>
+                                    <td><span class="pill logica"><i class="fa-solid fa-shuffle"></i>Lógica</span></td>
+                                    <td>Evaluación de múltiples condiciones.</td>
+                                </tr>
+                                <tr class="search-item" data-keywords="sameperiodlastyear time inteligencia tiempo yoy">
+                                    <td><code class="text-blue">SAMEPERIODLASTYEAR</code></td>
+                                    <td><span class="pill time"><i class="fa-regular fa-clock"></i>Time Intel</span></td>
+                                    <td>Mismo rango de fechas año anterior.</td>
+                                </tr>
+                                <tr class="search-item" data-keywords="sum suma agregacion">
+                                    <td><code class="text-blue">SUM</code></td>
+                                    <td><span class="pill agregacion"><i class="fa-solid fa-layer-group"></i>Agregación</span></td>
+                                    <td>Suma valores de una columna.</td>
+                                </tr>
+                                <tr class="search-item" data-keywords="average promedio agregacion">
+                                    <td><code class="text-blue">AVERAGE</code></td>
+                                    <td><span class="pill agregacion"><i class="fa-solid fa-chart-simple"></i>Agregación</span></td>
+                                    <td>Promedio aritmético.</td>
+                                </tr>
+                                <tr class="search-item" data-keywords="filter filtro tabla">
+                                    <td><code class="text-blue">FILTER</code></td>
+                                    <td><span class="pill filtro"><i class="fa-solid fa-filter"></i>Filtro</span></td>
+                                    <td>Retorna tabla filtrada.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
