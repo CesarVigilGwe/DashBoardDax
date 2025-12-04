@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAX para el Sector Energético | Cheat Sheet Interactivo</title>
+
+    <!-- Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons: Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Syntax Highlighting: Highlight.js (Atom One Dark) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+
+    <!-- Animation: Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            /* Color Palette - Dark Mode (Default) */
+            --bg-body: #0f172a;
+            --bg-sidebar: #1e293b;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --bg-input: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+            /* Energy Accents */
+            --accent-blue: #38bdf8; /* Electric Blue */
+            --accent-green: #4ade80; /* Renewable Green */
+            --accent-yellow: #facc15; /* Solar Yellow */
+            --accent-orange: #fb923c;
+
+            /* Functional */
+            --success: #22c55e;
+            --warning: #eab308;
+            --danger: #ef4444;
+
+            /* Spacing */
+            --sidebar-width: 300px;
+            --header-height: 70px;
+            --radius: 0.75rem;
+        }
+
+        /* Light Mode Overrides */
+        [data-theme="light"] {
+            --bg-body: #f1f5f9;
+            --bg-sidebar: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f8fafc;
+            --bg-input: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-body);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* Base Layout */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            z-index: 50;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            font-weight: 800;
+            font-size: 1.25rem;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            padding: 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius);
+            margin-bottom: 0.25rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(56, 189, 248, 0.1);
+            color: var(--accent-blue);
+        }
+
+        .nav-item i {
+            width: 24px;
+            margin-right: 0.5rem;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            max-width: 1600px; /* Limit width on very large screens */
+        }
+
+        /* Mobile Toggle */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background-color: var(--accent-blue);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: var(--shadow-md);
+            z-index: 100;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            .mobile-toggle {
+                display: flex;
+            }
+        }
+
+        /* Components: Search Bar */
+        .search-container {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            font-family: inherit;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* Components: Cards */
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Section Styling */
+        .section {
+            margin-bottom: 4rem;
+            padding-top: 1rem; /* Offset for anchor links */
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Utility */
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .hidden { display: none !important; }
+        .text-blue { color: var(--accent-blue); }
+        .text-green { color: var(--accent-green); }
+        .text-yellow { color: var(--accent-yellow); }
+        .text-orange { color: var(--accent-orange); }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-blue);
+            color: #fff;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+        .btn-outline:hover {
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .tag-basic { background-color: rgba(74, 222, 128, 0.1); color: var(--accent-green); }
+        .tag-intermediate { background-color: rgba(56, 189, 248, 0.1); color: var(--accent-blue); }
+        .tag-advanced { background-color: rgba(251, 146, 60, 0.1); color: var(--accent-orange); }
+
+        /* Code Block Styling */
+        .code-block-wrapper {
+            position: relative;
+            margin-top: 1rem;
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0d1117; /* Darker than sidebar */
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        pre {
+            margin: 0;
+        }
+
+        code.hljs {
+            padding: 1.5rem !important;
+            font-size: 0.9rem;
+            background-color: #0f172a !important;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn:hover {
+            color: var(--text-primary);
+        }
+
+        /* Example Visualization Styling */
+        .example-viz {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+            background-color: rgba(0,0,0,0.2);
+            padding: 1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 768px) {
+            .example-viz {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .viz-header {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mini-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .mini-table th {
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.25rem 0.5rem;
+            color: var(--accent-blue);
+        }
+
+        .mini-table td {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 0.25rem 0.5rem;
+        }
+
+        .mini-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .mini-table tr.highlight-row {
+            background-color: rgba(34, 197, 94, 0.1); /* Green tint */
+        }
+
+        .result-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            background: rgba(56, 189, 248, 0.05);
+            border-radius: var(--radius);
+            padding: 1rem;
+            text-align: center;
+            border: 1px dashed var(--accent-blue);
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-green);
+            margin-bottom: 0.25rem;
+        }
+
+        .result-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <i class="fa-solid fa-bolt"></i> DAX Energy
+                </div>
+                <!-- Dark Mode Toggle Mini -->
+                <button id="theme-toggle-mini" class="btn-outline btn" style="padding: 0.25rem 0.5rem;">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+
+            <div class="sidebar-content">
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="global-search" class="search-input" placeholder="Buscar función...">
+                </div>
+
+                <div class="filters mb-4">
+                    <label style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase;">Nivel</label>
+                    <div class="flex-between" style="margin-top: 0.5rem; gap: 0.25rem;">
+                        <button class="btn btn-outline" style="flex:1; font-size: 0.75rem;" data-filter="all">Todo</button>
+                        <button class="btn btn-outline" style="flex:1; font-size: 0.75rem;" data-filter="basic">⭐</button>
+                        <button class="btn btn-outline" style="flex:1; font-size: 0.75rem;" data-filter="intermediate">⭐⭐</button>
+                        <button class="btn btn-outline" style="flex:1; font-size: 0.75rem;" data-filter="advanced">⭐⭐⭐</button>
+                    </div>
+                </div>
+
+                <nav id="navbar">
+                    <a href="#hero" class="nav-item active"><i class="fa-solid fa-home"></i> Inicio</a>
+                    <a href="#fundamentos" class="nav-item"><i class="fa-solid fa-cube"></i> Fundamentos</a>
+                    <a href="#intermedias" class="nav-item"><i class="fa-solid fa-layer-group"></i> Intermedias</a>
+                    <a href="#avanzadas" class="nav-item"><i class="fa-solid fa-code-branch"></i> Avanzadas</a>
+                    <a href="#metricas" class="nav-item"><i class="fa-solid fa-chart-line"></i> Métricas Energía</a>
+                    <a href="#nuevas-funciones" class="nav-item"><i class="fa-solid fa-plus-circle"></i> Extras</a>
+                    <a href="#patrones" class="nav-item"><i class="fa-solid fa-shapes"></i> Patrones</a>
+                    <a href="#dashboards" class="nav-item"><i class="fa-solid fa-table-columns"></i> Dashboards</a>
+                    <a href="#referencia" class="nav-item"><i class="fa-solid fa-book"></i> Referencia</a>
+                </nav>
+            </div>
+
+            <div class="sidebar-footer">
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                    <div class="flex-between mb-4">
+                        <span><i class="fa-solid fa-star"></i> Favoritos</span>
+                        <span class="tag tag-intermediate" id="fav-count">0</span>
+                    </div>
+                    <div class="flex-between">
+                        <span><i class="fa-solid fa-note-sticky"></i> Mis Notas</span>
+                        <span class="tag tag-intermediate" id="note-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section id="hero" class="section" style="padding-top: 4rem; text-align: center;">
+                <h1 style="font-size: 3.5rem; margin-bottom: 1.5rem; background: linear-gradient(to right, var(--accent-green), var(--accent-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2;">
+                    DAX para el Sector Energético:<br>De 0 a Experto
+                </h1>
+                <p style="font-size: 1.25rem; color: var(--text-secondary); max-width: 800px; margin: 0 auto 3rem;">
+                    La referencia interactiva definitiva para analistas de datos en energía. Domina DAX desde cálculos básicos de producción hasta modelos financieros complejos de plantas y sostenibilidad.
+                </p>
+
+                <div style="display: flex; justify-content: center; gap: 3rem; margin-bottom: 3rem; flex-wrap: wrap;">
+                    <div class="stat-item">
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--text-primary);">150+</div>
+                        <div style="color: var(--text-secondary);">Fórmulas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--text-primary);">8</div>
+                        <div style="color: var(--text-secondary);">Categorías</div>
+                    </div>
+                    <div class="stat-item">
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--text-primary);">50+</div>
+                        <div style="color: var(--text-secondary);">Casos Reales</div>
+                    </div>
+                </div>
+
+                <a href="#fundamentos" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem; border-radius: 2rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    Comenzar Ahora <i class="fa-solid fa-arrow-down"></i>
+                </a>
+            </section>
+
+            <!-- Fundamentos -->
+            <section id="fundamentos" class="section" data-level="basic">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-cube text-blue"></i> Fundamentos de DAX</h2>
+                    <p class="section-desc">Conceptos esenciales explicados con el lenguaje de la energía.</p>
+                </div>
+
+                <!-- Concepts Cards -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                    <div class="card search-item" data-keywords="medida columna calculada cpu ram">
+                        <div class="flex-between mb-4">
+                            <h3 class="mb-0"><i class="fa-solid fa-ruler-combined text-green"></i> Medidas vs Columnas</h3>
+                        </div>
+                        <p class="mb-4" style="color: var(--text-secondary);">
+                            <strong>Medida:</strong> Cálculo dinámico (CPU). Se recalcula según los filtros del reporte (ej. Slicers de Región).<br>
+                            <em>Ej: Total Producción MWh.</em>
+                        </p>
+                        <p style="color: var(--text-secondary);">
+                            <strong>Columna Calculada:</strong> Estática (RAM). Se calcula una vez al cargar datos y ocupa espacio.<br>
+                            <em>Ej: Categoría de Planta (Renovable/Fósil).</em>
+                        </p>
+                    </div>
+                    <div class="card search-item" data-keywords="contexto fila filtro row filter context">
+                        <div class="flex-between mb-4">
+                            <h3 class="mb-0"><i class="fa-solid fa-filter text-yellow"></i> Contexto</h3>
+                        </div>
+                        <p class="mb-4" style="color: var(--text-secondary);">
+                            <strong>Contexto de Fila:</strong> "En esta línea específica". Itera fila por fila.<br>
+                            <em>Usado en columnas calculadas e iteradores (SUMX).</em>
+                        </p>
+                        <p style="color: var(--text-secondary);">
+                            <strong>Contexto de Filtro:</strong> "En el reporte actual". Afectado por visuales y slicers.<br>
+                            <em>Usado en medidas estándar.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="mb-4">Funciones de Agregación Básicas</h3>
+
+                <!-- Function Item: SUM -->
+                <div class="card search-item" data-keywords="sum suma total produccion">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">SUM</h4>
+                        <span class="tag tag-basic">Básico</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Suma todos los números de una columna. La base de cualquier reporte energético.</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Producción Total</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Total Producción MWh = SUM('Producción Diaria'[Generación_MWh])</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div>
+                            <div class="viz-header"><i class="fa-solid fa-table"></i> Producción Diaria</div>
+                            <table class="mini-table">
+                                <thead><tr><th>Fecha</th><th>Planta</th><th>Generación_MWh</th></tr></thead>
+                                <tbody>
+                                    <tr><td>01/01</td><td>Solar A</td><td>120</td></tr>
+                                    <tr><td>01/01</td><td>Eólica B</td><td>450</td></tr>
+                                    <tr><td>02/01</td><td>Solar A</td><td>130</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value">700</div>
+                            <div class="result-label">MWh</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Function Item: AVERAGE -->
+                <div class="card search-item" data-keywords="average promedio consumo">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">AVERAGE</h4>
+                        <span class="tag tag-basic">Básico</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Calcula la media aritmética. Útil para perfiles de consumo.</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Consumo Promedio Cliente</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Consumo Promedio = AVERAGE('Lecturas Medidores'[Consumo_kWh])</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div>
+                            <div class="viz-header"><i class="fa-solid fa-table"></i> Lecturas Medidores</div>
+                            <table class="mini-table">
+                                <thead><tr><th>Medidor</th><th>Consumo_kWh</th></tr></thead>
+                                <tbody>
+                                    <tr><td>M-001</td><td>250</td></tr>
+                                    <tr><td>M-002</td><td>300</td></tr>
+                                    <tr><td>M-003</td><td>200</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value">250</div>
+                            <div class="result-label">kWh (Media)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Function Item: COUNT/DISTINCTCOUNT -->
+                <div class="card search-item" data-keywords="count distinctcount contar recuento medidores">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">COUNT / DISTINCTCOUNT</h4>
+                        <span class="tag tag-basic">Básico</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Cuenta filas o valores únicos. Fundamental para inventarios de activos.</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Conteo de Activos</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Total Medidores = DISTINCTCOUNT('Clientes'[ID_Medidor])
+Total Registros Falla = COUNT('Registro Eventos'[ID_Evento])</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div>
+                            <div class="viz-header"><i class="fa-solid fa-table"></i> Clientes</div>
+                            <table class="mini-table">
+                                <thead><tr><th>ID_Medidor</th><th>Estado</th></tr></thead>
+                                <tbody>
+                                    <tr><td>M-001</td><td>Activo</td></tr>
+                                    <tr><td>M-002</td><td>Activo</td></tr>
+                                    <tr><td>M-001</td><td>Activo (Dup)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value">2</div>
+                            <div class="result-label">Medidores Únicos</div>
+                            <div class="result-value" style="font-size: 1.1rem; margin-top: 0.5rem; color: var(--accent-yellow);">3</div>
+                            <div class="result-label">Registros (Count)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Function Item: MIN/MAX -->
+                <div class="card search-item" data-keywords="min max pico demanda maximo minimo">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">MIN / MAX</h4>
+                        <span class="tag tag-basic">Básico</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Encuentra los valores extremos. Crítico para identificar picos de demanda.</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Pico de Demanda</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Demanda Pico MW = MAX('Demanda Horaria'[Carga_MW])
+Producción Mínima = MIN('Producción Diaria'[Generación_MWh])</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div>
+                            <div class="viz-header"><i class="fa-solid fa-table"></i> Demanda Horaria</div>
+                            <table class="mini-table">
+                                <thead><tr><th>Hora</th><th>Carga_MW</th></tr></thead>
+                                <tbody>
+                                    <tr><td>10:00</td><td>45</td></tr>
+                                    <tr><td>18:00</td><td>85</td></tr>
+                                    <tr><td>23:00</td><td>30</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value">85</div>
+                            <div class="result-label">MAX (MW)</div>
+                            <div class="result-value" style="font-size: 1.1rem; margin-top: 0.5rem; color: var(--accent-orange);">30</div>
+                            <div class="result-label">MIN (MW)</div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Funciones Intermedias -->
+            <section id="intermedias" class="section" data-level="intermediate">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-layer-group text-blue"></i> Funciones Intermedias</h2>
+                    <p class="section-desc">Manipulación de contexto y relaciones entre tablas.</p>
+                </div>
+
+                <h3 class="mb-4">Filtros y Contexto</h3>
+
+                <!-- CALCULATE -->
+                <div class="card search-item" data-keywords="calculate filtros modificar contexto">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">CALCULATE</h4>
+                        <span class="tag tag-intermediate">Intermedio</span>
+                    </div>
+                    <p class="mb-4 text-secondary">La función más importante en DAX. Evalúa una expresión en un contexto modificado por filtros.</p>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Producción Solar Solamente</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Producción Solar = CALCULATE(
+    [Total Producción MWh],
+    'Plantas'[Tecnología] = "Solar Fotovoltaica"
+)</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div>
+                            <div class="viz-header"><i class="fa-solid fa-table"></i> Plantas</div>
+                            <table class="mini-table">
+                                <thead><tr><th>ID</th><th>Tecnología</th><th>MWh</th></tr></thead>
+                                <tbody>
+                                    <tr class="highlight-row"><td>P1</td><td>Solar Fotovoltaica</td><td>100</td></tr>
+                                    <tr><td>P2</td><td>Eólica</td><td>200</td></tr>
+                                    <tr class="highlight-row"><td>P3</td><td>Solar Fotovoltaica</td><td>150</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value">250</div>
+                            <div class="result-label">MWh (Solo Solar)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FILTER -->
+                <div class="card search-item" data-keywords="filter filtrar iterador tabla">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">FILTER</h4>
+                        <span class="tag tag-intermediate">Intermedio</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Devuelve una tabla que representa un subconjunto de otra tabla. Útil cuando el filtro es complejo (ej. medida vs constante).</p>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Plantas Alta Eficiencia</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Plantas Eficientes = CALCULATE(
+    COUNTROWS('Plantas'),
+    FILTER(
+        'Plantas',
+        'Plantas'[Eficiencia_Térmica] > 0.85
+    )
+)</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div>
+                            <div class="viz-header"><i class="fa-solid fa-table"></i> Plantas (Filtro > 0.85)</div>
+                            <table class="mini-table">
+                                <thead><tr><th>Planta</th><th>Eficiencia</th></tr></thead>
+                                <tbody>
+                                    <tr class="highlight-row"><td>Ciclo A</td><td>0.90</td></tr>
+                                    <tr><td>Vapor B</td><td>0.82</td></tr>
+                                    <tr class="highlight-row"><td>Ciclo C</td><td>0.88</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value">2</div>
+                            <div class="result-label">Plantas</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ALL / ALLEXCEPT -->
+                <div class="card search-item" data-keywords="all allexcept remover filtros porcentaje total">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">ALL / ALLEXCEPT</h4>
+                        <span class="tag tag-intermediate">Intermedio</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Ignora los filtros aplicados. Esencial para calcular porcentajes del total.</p>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>% Contribución Regional</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">% Contribución = DIVIDE(
+    [Total Producción MWh],
+    CALCULATE([Total Producción MWh], ALL('Regiones'))
+)</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                            <div class="mb-2"><strong>Contexto Actual (Filtro):</strong> Región = "Norte"</div>
+                            <table class="mini-table">
+                                <thead><tr><th>Medida</th><th>Valor</th></tr></thead>
+                                <tbody>
+                                    <tr><td>[Total Producción]</td><td>100 MWh</td></tr>
+                                    <tr><td>CALCULATE(..., ALL)</td><td>300 MWh</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value">33.3%</div>
+                            <div class="result-label">Contribución</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="mb-4 mt-6">Relaciones y Tablas</h3>
+
+                <!-- RELATED -->
+                <div class="card search-item" data-keywords="related buscarv relaciones dimension">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">RELATED</h4>
+                        <span class="tag tag-intermediate">Intermedio</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Trae un valor de una tabla relacionada (lado 'uno' de la relación). Similar a VLOOKUP.</p>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Columna Calc: Zona Geográfica</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Zona = RELATED('Geografía'[Nombre_Zona])</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div>
+                            <div class="viz-header">Relación (* : 1)</div>
+                            <div style="display: flex; gap: 1rem; align-items: center; font-size: 0.8rem; color: var(--text-secondary);">
+                                <div>
+                                    <div><strong>'Ventas'</strong></div>
+                                    <div>ZonaID: 1</div>
+                                </div>
+                                <i class="fa-solid fa-arrow-right text-blue"></i>
+                                <div>
+                                    <div><strong>'Geografía'</strong></div>
+                                    <div>ID: 1 | Nombre: "Norte"</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value" style="font-size: 1.2rem;">"Norte"</div>
+                            <div class="result-label">Valor Traído</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- USERELATIONSHIP -->
+                <div class="card search-item" data-keywords="userelationship relacion inactiva fechas">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">USERELATIONSHIP</h4>
+                        <span class="tag tag-intermediate">Intermedio</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Activa una relación inactiva solo para el cálculo actual. Común para Fecha de Pedido vs Fecha de Entrega.</p>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Mantenimientos por Fecha Inicio</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Mantenimientos Iniciados = CALCULATE(
+    COUNT('Mantenimientos'[ID]),
+    USERELATIONSHIP('Calendario'[Fecha], 'Mantenimientos'[Fecha_Inicio])
+)</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                            <div class="viz-header">Modelo de Datos</div>
+                            <ul style="list-style: none; padding-left: 0;">
+                                <li class="mb-2"><i class="fa-solid fa-link"></i> Activa: Fecha Reporte</li>
+                                <li class="mb-2 text-blue"><i class="fa-solid fa-link-slash"></i> Inactiva: Fecha Inicio (Activada por DAX)</li>
+                            </ul>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Contexto Cambiado a</div>
+                            <div class="result-value" style="font-size: 1.2rem;">Fecha Inicio</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="mb-4 mt-6">Tablas Calculadas</h3>
+
+                <!-- SUMMARIZE -->
+                <div class="card search-item" data-keywords="summarize resumen agrupar tabla">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">SUMMARIZE</h4>
+                        <span class="tag tag-intermediate">Intermedio</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Agrupa datos por columnas específicas. Útil para tablas virtuales o resumen.</p>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Resumen Producción por Región</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Tabla Resumen = SUMMARIZE(
+    'Producción Diaria',
+    'Plantas'[Región],
+    "Total Generado", SUM('Producción Diaria'[Generación_MWh])
+)</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div>
+                            <div class="viz-header">Agrupación (Group By)</div>
+                            <table class="mini-table">
+                                <thead><tr><th>Región</th><th>Total Generado</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Norte</td><td>3,500</td></tr>
+                                    <tr><td>Sur</td><td>1,200</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value" style="font-size: 1.2rem;"><i class="fa-solid fa-table"></i></div>
+                            <div class="result-label">Nueva Tabla</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ADDCOLUMNS -->
+                <div class="card search-item" data-keywords="addcolumns agregar columna tabla virtual">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">ADDCOLUMNS</h4>
+                        <span class="tag tag-intermediate">Intermedio</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Añade columnas calculadas a una tabla existente. Mejor práctica sobre SUMMARIZE para agregar columnas.</p>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Agregar Cálculo de Emisiones</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Tabla con Emisiones = ADDCOLUMNS(
+    'Plantas',
+    "Emisiones Totales", [Total Emisiones CO2]
+)</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div>
+                            <div class="viz-header">Iteración de Columnas</div>
+                            <table class="mini-table">
+                                <thead><tr><th>Planta</th><th>(Nueva) Emisiones</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Planta A</td><td>500 t</td></tr>
+                                    <tr><td>Planta B</td><td>120 t</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value" style="font-size: 1.2rem;"><i class="fa-solid fa-plus"></i></div>
+                            <div class="result-label">Columna Virtual</div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Funciones Avanzadas -->
+            <section id="avanzadas" class="section" data-level="advanced">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-code-branch text-blue"></i> Funciones Avanzadas</h2>
+                    <p class="section-desc">Inteligencia de tiempo, iteradores y lógica compleja.</p>
+                </div>
+
+                <h3 class="mb-4">Time Intelligence</h3>
+
+                <!-- Time Intelligence Group -->
+                <div class="card search-item" data-keywords="dateadd sameperiodlastyear yoy mom time intelligence tiempo fechas">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">Análisis Temporal (YoY, YTD)</h4>
+                        <span class="tag tag-advanced">Avanzado</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Comparaciones de periodos y acumulados.</p>
+
+                    <div class="code-block-wrapper mb-4">
+                        <div class="code-header">
+                            <span>Producción Año Anterior (YoY)</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Producción LY = CALCULATE(
+    [Total Producción MWh],
+    SAMEPERIODLASTYEAR('Calendario'[Fecha])
+)
+
+Variación YoY % = DIVIDE(
+    [Total Producción MWh] - [Producción LY],
+    [Producción LY]
+)</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div>
+                            <div class="viz-header">Comparación Temporal</div>
+                            <table class="mini-table">
+                                <thead><tr><th>Año</th><th>Producción</th><th>(LY) Año Pasado</th></tr></thead>
+                                <tbody>
+                                    <tr><td>2022</td><td>900</td><td>850</td></tr>
+                                    <tr class="highlight-row"><td>2023</td><td>1,000</td><td>900</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value">+11.1%</div>
+                            <div class="result-label">Crecimiento YoY</div>
+                        </div>
+                    </div>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Acumulado Anual (YTD)</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Producción YTD = TOTALYTD(
+    [Total Producción MWh],
+    'Calendario'[Fecha]
+)</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div>
+                            <div class="viz-header">Acumulado (Year-to-Date)</div>
+                            <table class="mini-table">
+                                <thead><tr><th>Mes</th><th>Mensual</th><th>YTD</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Ene</td><td>100</td><td>100</td></tr>
+                                    <tr><td>Feb</td><td>120</td><td>220</td></tr>
+                                    <tr class="highlight-row"><td>Mar</td><td>130</td><td>350</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value">350</div>
+                            <div class="result-label">MWh Acumulados</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="mb-4 mt-6">Iteradores (Funciones X)</h3>
+
+                <!-- SUMX -->
+                <div class="card search-item" data-keywords="sumx iterador fila por fila costo">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">SUMX</h4>
+                        <span class="tag tag-advanced">Avanzado</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Itera sobre una tabla y evalúa una expresión fila por fila, luego suma los resultados. Necesario cuando la operación debe hacerse a nivel de línea antes de agregar.</p>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Costo Total Combustible</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Costo Total = SUMX(
+    'Consumo Combustible',
+    'Consumo Combustible'[Volumen_MMBTU] * 'Consumo Combustible'[Precio_Unitario_USD]
+)</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div>
+                            <div class="viz-header">Iteración Fila por Fila</div>
+                            <table class="mini-table">
+                                <thead><tr><th>Vol</th><th>Precio</th><th>Subtotal (Memoria)</th></tr></thead>
+                                <tbody>
+                                    <tr><td>10</td><td>$5</td><td>$50</td></tr>
+                                    <tr><td>20</td><td>$4</td><td>$80</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value">$130</div>
+                            <div class="result-label">Suma de Subtotales</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RANKX -->
+                <div class="card search-item" data-keywords="rankx ranking top plantas">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">RANKX</h4>
+                        <span class="tag tag-advanced">Avanzado</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Calcula el ranking de un valor dentro de una lista.</p>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Ranking de Plantas por Producción</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Ranking Plantas = RANKX(
+    ALL('Plantas'),
+    [Total Producción MWh],
+    ,
+    DESC
+)</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div>
+                            <div class="viz-header">Ranking Dinámico</div>
+                            <table class="mini-table">
+                                <thead><tr><th>Planta</th><th>MWh</th><th>Rank</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Planta A</td><td>500</td><td>2</td></tr>
+                                    <tr class="highlight-row"><td>Planta B</td><td>800</td><td>1</td></tr>
+                                    <tr><td>Planta C</td><td>200</td><td>3</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value">#1</div>
+                            <div class="result-label">Planta B</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="mb-4 mt-6">Lógica Compleja</h3>
+
+                <!-- SWITCH -->
+                <div class="card search-item" data-keywords="switch if condicional caso">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">SWITCH</h4>
+                        <span class="tag tag-advanced">Avanzado</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Reemplaza múltiples IF anidados. Más limpio y fácil de leer.</p>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Clasificación de Tamaño Planta</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Tamaño Planta = SWITCH(
+    TRUE(),
+    'Plantas'[Capacidad_MW] < 10, "Pequeña Generación",
+    'Plantas'[Capacidad_MW] < 100, "Mediana",
+    "Gran Generación"
+)</code></pre>
+                    </div>
+
+                    <div class="example-viz">
+                        <div>
+                            <div class="viz-header">Lógica Condicional</div>
+                            <table class="mini-table">
+                                <thead><tr><th>Planta</th><th>MW</th><th>Clasificación</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Solar 1</td><td>5</td><td>Pequeña</td></tr>
+                                    <tr class="highlight-row"><td>Eólica 1</td><td>50</td><td>Mediana</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value">"Mediana"</div>
+                            <div class="result-label">Result for 50MW</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Métricas Sector Energético -->
+            <section id="metricas" class="section" data-level="advanced">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-chart-line text-blue"></i> Métricas del Sector Energético</h2>
+                    <p class="section-desc">Fórmulas estándar de la industria listas para copiar.</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
+
+                    <!-- Factor de Capacidad -->
+                    <div class="card search-item" data-keywords="factor capacidad eficiencia produccion">
+                        <div class="flex-between mb-2">
+                            <h4 class="text-green">Factor de Capacidad</h4>
+                            <i class="fa-solid fa-solar-panel text-secondary"></i>
+                        </div>
+                        <p class="mb-4 text-secondary" style="font-size: 0.9rem;">Relación entre la energía real generada y la máxima posible.</p>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span>DAX</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            </div>
+                            <pre><code class="language-dax">Factor de Capacidad =
+DIVIDE(
+    [Producción Real MWh],
+    [Capacidad Instalada MW] * 24 * [Días del Período],
+    0
+) * 100</code></pre>
+                        </div>
+                        <div class="example-viz">
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                <div><strong>Prod. Real:</strong> 720 MWh</div>
+                                <div><strong>Max Teórico:</strong> 2,400 MWh (100MW x 24h)</div>
+                            </div>
+                            <div class="result-box" style="padding: 0.5rem;">
+                                <div class="result-value" style="font-size: 1.2rem;">30%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Factor de Carga -->
+                    <div class="card search-item" data-keywords="factor carga demanda pico">
+                        <div class="flex-between mb-2">
+                            <h4 class="text-yellow">Factor de Carga</h4>
+                            <i class="fa-solid fa-plug-circle-bolt text-secondary"></i>
+                        </div>
+                        <p class="mb-4 text-secondary" style="font-size: 0.9rem;">Mide la uniformidad del consumo eléctrico.</p>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span>DAX</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            </div>
+                            <pre><code class="language-dax">Factor de Carga =
+DIVIDE(
+    [Demanda Promedio],
+    [Demanda Pico],
+    0
+) * 100</code></pre>
+                        </div>
+                        <div class="example-viz">
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                <div><strong>Promedio:</strong> 50 MW</div>
+                                <div><strong>Pico:</strong> 100 MW</div>
+                            </div>
+                            <div class="result-box" style="padding: 0.5rem;">
+                                <div class="result-value" style="font-size: 1.2rem;">50%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Eficiencia Térmica -->
+                    <div class="card search-item" data-keywords="eficiencia termica calor heat rate">
+                        <div class="flex-between mb-2">
+                            <h4 class="text-orange">Eficiencia Térmica</h4>
+                            <i class="fa-solid fa-fire text-secondary"></i>
+                        </div>
+                        <p class="mb-4 text-secondary" style="font-size: 0.9rem;">Conversión de combustible a electricidad.</p>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span>DAX</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            </div>
+                            <pre><code class="language-dax">Eficiencia Térmica =
+DIVIDE(
+    [Energía Generada MWh] * 3.412,
+    [Combustible Consumido MMBTU],
+    0
+) * 100</code></pre>
+                        </div>
+                        <div class="example-viz">
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                <div><strong>Gen:</strong> 1 MWh (3.412 MMBTU)</div>
+                                <div><strong>Fuel:</strong> 10 MMBTU</div>
+                            </div>
+                            <div class="result-box" style="padding: 0.5rem;">
+                                <div class="result-value" style="font-size: 1.2rem;">34.1%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LCOE -->
+                    <div class="card search-item" data-keywords="lcoe costo nivelado energia inversion financiero">
+                        <div class="flex-between mb-2">
+                            <h4 class="text-blue">LCOE (Levelized Cost of Energy)</h4>
+                            <i class="fa-solid fa-money-bill-wave text-secondary"></i>
+                        </div>
+                        <p class="mb-4 text-secondary" style="font-size: 0.9rem;">Costo neto presente de generar electricidad durante la vida útil.</p>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span>DAX</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            </div>
+                            <pre><code class="language-dax">LCOE =
+DIVIDE(
+    [Inversión Total] + [Costos O&M Lifetime],
+    [Producción Total Lifetime MWh],
+    0
+)</code></pre>
+                        </div>
+                        <div class="example-viz">
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                <div><strong>Costos Totales:</strong> $1,000,000</div>
+                                <div><strong>Gen Total:</strong> 20,000 MWh</div>
+                            </div>
+                            <div class="result-box" style="padding: 0.5rem;">
+                                <div class="result-value" style="font-size: 1.2rem;">$50</div>
+                                <div class="result-label">/ MWh</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intensidad de Carbono -->
+                    <div class="card search-item" data-keywords="carbono emisiones co2 sostenibilidad">
+                        <div class="flex-between mb-2">
+                            <h4 class="text-green">Intensidad de Carbono</h4>
+                            <i class="fa-solid fa-leaf text-secondary"></i>
+                        </div>
+                        <p class="mb-4 text-secondary" style="font-size: 0.9rem;">Emisiones por unidad de energía generada (gCO2/kWh).</p>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span>DAX</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            </div>
+                            <pre><code class="language-dax">Intensidad de Carbono =
+DIVIDE(
+    [Emisiones CO2 Toneladas] * 1000,
+    [Producción Total MWh],
+    0
+)</code></pre>
+                        </div>
+                        <div class="example-viz">
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                <div><strong>CO2:</strong> 0.5 Ton (500kg)</div>
+                                <div><strong>Gen:</strong> 1 MWh</div>
+                            </div>
+                            <div class="result-box" style="padding: 0.5rem;">
+                                <div class="result-value" style="font-size: 1.2rem;">500</div>
+                                <div class="result-label">gCO2/kWh</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Nuevas Funciones Útiles -->
+            <section id="nuevas-funciones" class="section" data-level="advanced">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-plus-circle text-blue"></i> Funciones Adicionales</h2>
+                    <p class="section-desc">Herramientas esenciales para escenarios complejos de datos energéticos.</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
+
+                    <!-- DATESINPERIOD -->
+                    <div class="card search-item" data-keywords="datesinperiod media movil rolling average promedio tiempo">
+                        <div class="flex-between mb-2">
+                            <h4 class="text-blue">DATESINPERIOD (Media Móvil)</h4>
+                            <span class="tag tag-advanced">Avanzado</span>
+                        </div>
+                        <p class="mb-4 text-secondary">Devuelve un conjunto de fechas. Ideal para suavizar la volatilidad de generación eólica/solar.</p>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span>Promedio Móvil 30 Días</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            </div>
+                            <pre><code class="language-dax">Media Móvil = CALCULATE(
+    AVERAGE('Producción'[MWh]),
+    DATESINPERIOD(
+        'Calendario'[Fecha],
+        LASTDATE('Calendario'[Fecha]),
+        -30,
+        DAY
+    )
+)</code></pre>
+                        </div>
+                        <div class="example-viz">
+                            <div>
+                                <div class="viz-header">Suavizado de Datos</div>
+                                <table class="mini-table">
+                                    <thead><tr><th>Día</th><th>Real</th><th>Móvil (3d)</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>1</td><td>100</td><td>100</td></tr>
+                                        <tr><td>2</td><td>200</td><td>150</td></tr>
+                                        <tr class="highlight-row"><td>3</td><td>0</td><td>100</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="result-box">
+                                <div class="result-value">100</div>
+                                <div class="result-label">Avg (100, 200, 0)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COALESCE -->
+                    <div class="card search-item" data-keywords="coalesce isblank nulos vacios null zero">
+                        <div class="flex-between mb-2">
+                            <h4 class="text-blue">COALESCE (Manejo de Nulos)</h4>
+                            <span class="tag tag-intermediate">Intermedio</span>
+                        </div>
+                        <p class="mb-4 text-secondary">Devuelve el primer valor que no esté en blanco. Vital para medidores sin lectura.</p>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span>Lectura Segura</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            </div>
+                            <pre><code class="language-dax">Lectura Final = COALESCE(
+    'Medidores'[Lectura_Real],
+    'Medidores'[Lectura_Estimada],
+    0
+)</code></pre>
+                        </div>
+                        <div class="example-viz">
+                            <div>
+                                <div class="viz-header">Prioridad de Datos</div>
+                                <table class="mini-table">
+                                    <thead><tr><th>Medidor</th><th>Real</th><th>Est.</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>M1</td><td>100</td><td>90</td></tr>
+                                        <tr class="highlight-row"><td>M2</td><td>(Null)</td><td>95</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="result-box">
+                                <div class="result-value">95</div>
+                                <div class="result-label">Usa Estimada</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KEEPFILTERS -->
+                    <div class="card search-item" data-keywords="keepfilters contexto filtro seguridad">
+                        <div class="flex-between mb-2">
+                            <h4 class="text-blue">KEEPFILTERS</h4>
+                            <span class="tag tag-advanced">Avanzado</span>
+                        </div>
+                        <p class="mb-4 text-secondary">Añade filtros al contexto sin eliminar los existentes. Mantiene la selección del usuario.</p>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span>Meta Solo Solar</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            </div>
+                            <pre><code class="language-dax">Meta Solar = CALCULATE(
+    [Meta Total],
+    KEEPFILTERS('Plantas'[Tipo] = "Solar")
+)</code></pre>
+                        </div>
+                        <div class="example-viz">
+                            <div style="font-size:0.8rem; color:var(--text-secondary);">
+                                <div class="mb-2"><strong>Slicer Usuario:</strong> Región="Norte"</div>
+                                <div><strong>Sin KEEPFILTERS:</strong> Muestra Solar de TODAS regiones (si reemplaza contexto).</div>
+                                <div class="text-green"><strong>Con KEEPFILTERS:</strong> Muestra Solar SOLO del Norte (Intersección).</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LOOKUPVALUE -->
+                    <div class="card search-item" data-keywords="lookupvalue buscarv tarifa precio">
+                        <div class="flex-between mb-2">
+                            <h4 class="text-blue">LOOKUPVALUE</h4>
+                            <span class="tag tag-intermediate">Intermedio</span>
+                        </div>
+                        <p class="mb-4 text-secondary">Busca un valor en una tabla desconectada. Similar a VLOOKUP en Excel.</p>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span>Buscar Tarifa</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            </div>
+                            <pre><code class="language-dax">Tarifa Vigente = LOOKUPVALUE(
+    'Tarifas'[Precio_kWh],
+    'Tarifas'[Categoría], 'Clientes'[Categoría],
+    'Tarifas'[Año], 2023
+)</code></pre>
+                        </div>
+                        <div class="example-viz">
+                            <div>
+                                <div class="viz-header">Búsqueda</div>
+                                <table class="mini-table">
+                                    <thead><tr><th>Cliente</th><th>Cat</th><th>(Tarifas)</th></tr></thead>
+                                    <tbody>
+                                        <tr class="highlight-row"><td>Ind. A</td><td>Industrial</td><td>$0.15</td></tr>
+                                        <tr><td>Res. B</td><td>Residencial</td><td>$0.20</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="result-box">
+                                <div class="result-value">$0.15</div>
+                                <div class="result-label">Precio Encontrado</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Optimización y Best Practices -->
+            <section id="optimizacion" class="section" data-level="advanced">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-rocket text-blue"></i> Optimización y Best Practices</h2>
+                    <p class="section-desc">Escribe código DAX más rápido y limpio.</p>
+                </div>
+
+                <div class="card search-item" data-keywords="variables var return performance">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">Uso de Variables (VAR)</h4>
+                        <span class="tag tag-advanced">Performance</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Las variables mejoran la legibilidad y el rendimiento al calcular una expresión solo una vez.</p>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Ejemplo con VAR</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Crecimiento Ventas =
+VAR VentasActuales = [Ventas Totales]
+VAR VentasAnteriores = CALCULATE([Ventas Totales], SAMEPERIODLASTYEAR('Calendario'[Fecha]))
+RETURN
+    DIVIDE(VentasActuales - VentasAnteriores, VentasAnteriores)</code></pre>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <div class="card">
+                        <h4 class="mb-2 text-green"><i class="fa-solid fa-check"></i> Recomendado</h4>
+                        <ul class="text-secondary" style="padding-left: 1rem; margin-top: 1rem;">
+                            <li class="mb-2">Usar <strong>DIVIDE</strong> en lugar de operador /.</li>
+                            <li class="mb-2">Filtrar columnas, no tablas enteras con <strong>FILTER</strong>.</li>
+                            <li class="mb-2">Usar <strong>medidas</strong> en lugar de columnas calculadas siempre que sea posible.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4 class="mb-2 text-orange"><i class="fa-solid fa-xmark"></i> Evitar</h4>
+                        <ul class="text-secondary" style="padding-left: 1rem; margin-top: 1rem;">
+                            <li class="mb-2">Usar demasiados iteradores (SUMX) anidados.</li>
+                            <li class="mb-2">Relaciones bidireccionales innecesarias.</li>
+                            <li class="mb-2">Convertir fechas a texto para filtrar.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Patrones y Casos de Uso -->
+            <section id="patrones" class="section" data-level="intermediate">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-shapes text-blue"></i> Patrones y Casos de Uso</h2>
+                    <p class="section-desc">Soluciones a problemas de negocio comunes.</p>
+                </div>
+
+                <div class="card search-item" data-keywords="abc pareto clasificacion clientes">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">Análisis ABC de Clientes</h4>
+                        <span class="tag tag-advanced">Avanzado</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Clasifica clientes basado en su consumo acumulado (Principio de Pareto 80/20).</p>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Clasificación Dinámica ABC</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Clase ABC =
+VAR VentasTotales = CALCULATE([Total Ventas], ALL('Clientes'))
+VAR VentasActuales = [Total Ventas]
+VAR VentasAcumuladas =
+    CALCULATE(
+        [Total Ventas],
+        FILTER(
+            ALL('Clientes'),
+            [Total Ventas] >= VentasActuales
+        )
+    )
+VAR PorcentajeAcumulado = DIVIDE(VentasAcumuladas, VentasTotales)
+RETURN
+    IF(PorcentajeAcumulado <= 0.7, "A",
+    IF(PorcentajeAcumulado <= 0.9, "B", "C"))</code></pre>
+                    </div>
+                </div>
+
+                <div class="card search-item" data-keywords="alertas semaforo kpi formato condicional">
+                    <div class="flex-between mb-4">
+                        <h4 class="text-blue">Semáforo de KPI (Alertas)</h4>
+                        <span class="tag tag-intermediate">Intermedio</span>
+                    </div>
+                    <p class="mb-4 text-secondary">Lógica para formato condicional en tablas y tarjetas.</p>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Color Status Planta</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                        <pre><code class="language-dax">Color Status =
+SWITCH(TRUE(),
+    [Disponibilidad %] < 0.90, "#ef4444", -- Rojo
+    [Disponibilidad %] < 0.95, "#eab308", -- Amarillo
+    "#22c55e" -- Verde
+)</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboards Examples -->
+            <section id="dashboards" class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-table-columns text-blue"></i> Ejemplos de Dashboard</h2>
+                    <p class="section-desc">Conceptos de visualización con las métricas aprendidas.</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
+
+                    <!-- Dashboard 1 -->
+                    <div class="card">
+                        <div class="mb-4" style="height: 150px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; border: 1px dashed var(--border-color);">
+                            <div style="text-align: center;">
+                                <i class="fa-solid fa-industry fa-3x text-blue mb-2"></i>
+                                <div style="color: var(--text-secondary);">Ejecutivo de Producción</div>
+                            </div>
+                        </div>
+                        <h4 class="mb-2">Resumen Ejecutivo de Generación</h4>
+                        <p class="text-secondary mb-4">Vista de alto nivel para directivos.</p>
+                        <ul class="text-secondary" style="list-style: none; padding-left: 0;">
+                            <li class="mb-2"><i class="fa-solid fa-check text-green mr-2"></i> <strong>KPI Principal:</strong> Total Producción vs Budget (Medidor).</li>
+                            <li class="mb-2"><i class="fa-solid fa-check text-green mr-2"></i> <strong>Tendencia:</strong> Gráfico de Área (Ene-Dic) con `TOTALYTD`.</li>
+                            <li class="mb-2"><i class="fa-solid fa-check text-green mr-2"></i> <strong>Detalle:</strong> Matriz por Planta con `RANKX`.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Dashboard 2 -->
+                    <div class="card">
+                        <div class="mb-4" style="height: 150px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; border: 1px dashed var(--border-color);">
+                            <div style="text-align: center;">
+                                <i class="fa-solid fa-chart-pie fa-3x text-yellow mb-2"></i>
+                                <div style="color: var(--text-secondary);">Análisis de Consumo</div>
+                            </div>
+                        </div>
+                        <h4 class="mb-2">Perfil de Consumo Clientes</h4>
+                        <p class="text-secondary mb-4">Análisis de patrones de demanda.</p>
+                        <ul class="text-secondary" style="list-style: none; padding-left: 0;">
+                            <li class="mb-2"><i class="fa-solid fa-check text-green mr-2"></i> <strong>Segmentación:</strong> Gráfico de dispersión (Consumo vs Pico).</li>
+                            <li class="mb-2"><i class="fa-solid fa-check text-green mr-2"></i> <strong>ABC:</strong> Treemap con clasificación de clientes.</li>
+                            <li class="mb-2"><i class="fa-solid fa-check text-green mr-2"></i> <strong>Heatmap:</strong> Horas punta usando `AVERAGE` por hora/día.</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Referencia Rápida -->
+            <section id="referencia" class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-book text-blue"></i> Referencia Rápida</h2>
+                    <p class="section-desc">Todas las funciones en un solo lugar.</p>
+                </div>
+
+                <div class="card" style="overflow-x: auto;">
+                    <table style="width: 100%; text-align: left; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th style="padding: 1rem; color: var(--text-primary);">Función</th>
+                                <th style="padding: 1rem; color: var(--text-primary);">Tipo</th>
+                                <th style="padding: 1rem; color: var(--text-primary);">Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reference-table-body" style="color: var(--text-secondary);">
+                            <!-- Populated via JS potentially, or static for now -->
+                            <tr class="search-item" data-keywords="calculate filtro" style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><code class="text-blue">CALCULATE</code></td>
+                                <td style="padding: 1rem;">Filtro</td>
+                                <td style="padding: 1rem;">Evalúa expresión en contexto modificado.</td>
+                            </tr>
+                            <tr class="search-item" data-keywords="sumx iterador" style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><code class="text-blue">SUMX</code></td>
+                                <td style="padding: 1rem;">Iterador</td>
+                                <td style="padding: 1rem;">Suma resultados fila por fila.</td>
+                            </tr>
+                            <tr class="search-item" data-keywords="related relacion buscarv" style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><code class="text-blue">RELATED</code></td>
+                                <td style="padding: 1rem;">Relación</td>
+                                <td style="padding: 1rem;">Trae valor de tabla 'uno'.</td>
+                            </tr>
+                            <tr class="search-item" data-keywords="totalytd time inteligencia tiempo" style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><code class="text-blue">TOTALYTD</code></td>
+                                <td style="padding: 1rem;">Time Intel</td>
+                                <td style="padding: 1rem;">Acumulado anual hasta la fecha.</td>
+                            </tr>
+                            <tr class="search-item" data-keywords="divide division matematicas" style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><code class="text-blue">DIVIDE</code></td>
+                                <td style="padding: 1rem;">Matemática</td>
+                                <td style="padding: 1rem;">División segura (maneja div/0).</td>
+                            </tr>
+                            <tr class="search-item" data-keywords="switch logica condicional" style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><code class="text-blue">SWITCH</code></td>
+                                <td style="padding: 1rem;">Lógica</td>
+                                <td style="padding: 1rem;">Evaluación de múltiples condiciones.</td>
+                            </tr>
+                            <tr class="search-item" data-keywords="sameperiodlastyear time inteligencia tiempo yoy" style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><code class="text-blue">SAMEPERIODLASTYEAR</code></td>
+                                <td style="padding: 1rem;">Time Intel</td>
+                                <td style="padding: 1rem;">Mismo rango de fechas año anterior.</td>
+                            </tr>
+                            <tr class="search-item" data-keywords="sum suma agregacion" style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><code class="text-blue">SUM</code></td>
+                                <td style="padding: 1rem;">Agregación</td>
+                                <td style="padding: 1rem;">Suma valores de una columna.</td>
+                            </tr>
+                            <tr class="search-item" data-keywords="average promedio agregacion" style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><code class="text-blue">AVERAGE</code></td>
+                                <td style="padding: 1rem;">Agregación</td>
+                                <td style="padding: 1rem;">Promedio aritmético.</td>
+                            </tr>
+                            <tr class="search-item" data-keywords="filter filtro tabla" style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem;"><code class="text-blue">FILTER</code></td>
+                                <td style="padding: 1rem;">Filtro</td>
+                                <td style="padding: 1rem;">Retorna tabla filtrada.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Recursos Adicionales -->
+            <section id="recursos" class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-link text-blue"></i> Recursos Adicionales</h2>
+                    <p class="section-desc">Herramientas y documentación para seguir aprendiendo.</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <!-- Glosario -->
+                    <div class="card">
+                        <h4 class="mb-4 text-blue"><i class="fa-solid fa-book-open"></i> Glosario Energético</h4>
+                        <ul class="text-secondary" style="list-style: none; padding-left: 0;">
+                            <li class="mb-2"><strong>MWh:</strong> Megawatt-hora. Unidad de energía producida o consumida.</li>
+                            <li class="mb-2"><strong>MW:</strong> Megawatt. Unidad de potencia (capacidad instantánea).</li>
+                            <li class="mb-2"><strong>Factor de Planta:</strong> % de utilización real vs teórica.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Enlaces -->
+                    <div class="card">
+                        <h4 class="mb-4 text-green"><i class="fa-solid fa-external-link-alt"></i> Links Útiles</h4>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <a href="https://learn.microsoft.com/en-us/dax/" target="_blank" style="color: var(--text-primary); text-decoration: none;" class="flex-between">
+                                <span>Documentación Oficial DAX</span>
+                                <i class="fa-solid fa-arrow-right text-secondary"></i>
+                            </a>
+                            <a href="https://dax.guide/" target="_blank" style="color: var(--text-primary); text-decoration: none;" class="flex-between">
+                                <span>DAX.guide (SQLBI)</span>
+                                <i class="fa-solid fa-arrow-right text-secondary"></i>
+                            </a>
+                            <a href="#" style="color: var(--text-primary); text-decoration: none;" class="flex-between">
+                                <span>Descargar Modelo de Datos (Ejemplo)</span>
+                                <i class="fa-solid fa-download text-secondary"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Mobile Toggle -->
+        <button class="mobile-toggle" id="sidebar-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- State Management ---
+            const state = {
+                favorites: JSON.parse(localStorage.getItem('dax_favorites')) || [],
+                notes: JSON.parse(localStorage.getItem('dax_notes')) || {},
+                theme: localStorage.getItem('dax_theme') || 'dark'
+            };
+
+            // --- UI References ---
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('sidebar-toggle');
+            const searchInput = document.getElementById('global-search');
+            const navLinks = document.querySelectorAll('.nav-item');
+            const sections = document.querySelectorAll('section');
+            const favCountEl = document.getElementById('fav-count');
+            const noteCountEl = document.getElementById('note-count');
+            const filterBtns = document.querySelectorAll('[data-filter]');
+            const themeBtn = document.getElementById('theme-toggle-mini');
+
+            // --- Initialization ---
+            applyTheme(state.theme);
+            injectActionButtons();
+            updateStats();
+            setupScrollSpy();
+
+            // --- Theme Logic ---
+            themeBtn.addEventListener('click', () => {
+                const newTheme = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+                applyTheme(newTheme);
+            });
+
+            function applyTheme(theme) {
+                document.body.setAttribute('data-theme', theme);
+                localStorage.setItem('dax_theme', theme);
+                const icon = themeBtn.querySelector('i');
+                if (theme === 'light') {
+                    icon.classList.replace('fa-moon', 'fa-sun');
+                } else {
+                    icon.classList.replace('fa-sun', 'fa-moon');
+                }
+            }
+
+            // --- Sidebar Mobile Toggle ---
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+                const icon = toggleBtn.querySelector('i');
+                sidebar.classList.contains('open')
+                    ? icon.classList.replace('fa-bars', 'fa-times')
+                    : icon.classList.replace('fa-times', 'fa-bars');
+            });
+
+            // --- Inject Favorites & Notes Buttons ---
+            function injectActionButtons() {
+                const cards = document.querySelectorAll('.card.search-item');
+                cards.forEach((card, index) => {
+                    // Create unique ID if not present
+                    const id = 'card-' + index;
+                    card.setAttribute('id', id);
+
+                    const header = card.querySelector('.flex-between');
+                    if (header) {
+                        const actionsDiv = document.createElement('div');
+                        actionsDiv.className = 'flex-between gap-2';
+
+                        // Favorite Button
+                        const isFav = state.favorites.includes(id);
+                        const favBtn = document.createElement('button');
+                        favBtn.className = `btn btn-outline ${isFav ? 'text-yellow' : ''}`;
+                        favBtn.innerHTML = `<i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-star"></i>`;
+                        favBtn.onclick = () => toggleFavorite(id, favBtn);
+
+                        // Note Button
+                        const hasNote = state.notes[id] ? true : false;
+                        const noteBtn = document.createElement('button');
+                        noteBtn.className = `btn btn-outline ${hasNote ? 'text-blue' : ''}`;
+                        noteBtn.innerHTML = `<i class="${hasNote ? 'fa-solid' : 'fa-regular'} fa-note-sticky"></i>`;
+                        noteBtn.onclick = () => toggleNote(id, noteBtn);
+
+                        // Original right side content (like tags)
+                        const originalRight = header.lastElementChild;
+
+                        // Re-structure
+                        // We want: Title ... [Fav][Note][Tag]
+                        // But current header has Title and Tag.
+                        // Let's wrap buttons and tag.
+
+                        // Actually, let's append buttons before the tag
+                        // Or create a container for controls
+
+                        // Simpler: Just append buttons to the header div, styling will handle flex.
+                        // But flex-between pushes 2 children apart.
+                        // Let's group the actions and the tag.
+                        const rightGroup = document.createElement('div');
+                        rightGroup.className = 'flex-between gap-2';
+                        rightGroup.appendChild(favBtn);
+                        rightGroup.appendChild(noteBtn);
+                        rightGroup.appendChild(originalRight); // Move tag here
+
+                        header.appendChild(rightGroup);
+                    }
+
+                    // Inject Note Area (Hidden by default)
+                    const noteArea = document.createElement('div');
+                    noteArea.id = `note-area-${id}`;
+                    noteArea.className = 'hidden mt-4 p-3';
+                    noteArea.style.backgroundColor = 'var(--bg-input)';
+                    noteArea.style.borderRadius = 'var(--radius)';
+                    noteArea.innerHTML = `
+                        <textarea class="w-100" style="width: 100%; background: transparent; border: none; color: var(--text-primary); resize: vertical; min-height: 80px; font-family: inherit;" placeholder="Escribe tus notas aquí...">${state.notes[id] || ''}</textarea>
+                        <button class="btn btn-primary mt-2" onclick="saveNote('${id}')" style="font-size: 0.8rem;">Guardar Nota</button>
+                    `;
+                    card.appendChild(noteArea);
+                });
+            }
+
+            // --- Actions Logic ---
+            window.toggleFavorite = (id, btn) => {
+                const index = state.favorites.indexOf(id);
+                const icon = btn.querySelector('i');
+
+                if (index === -1) {
+                    state.favorites.push(id);
+                    btn.classList.add('text-yellow');
+                    icon.classList.replace('fa-regular', 'fa-solid');
+                    // Animation
+                    btn.classList.add('animate__animated', 'animate__rubberBand');
+                    setTimeout(() => btn.classList.remove('animate__animated', 'animate__rubberBand'), 1000);
+                } else {
+                    state.favorites.splice(index, 1);
+                    btn.classList.remove('text-yellow');
+                    icon.classList.replace('fa-solid', 'fa-regular');
+                }
+                localStorage.setItem('dax_favorites', JSON.stringify(state.favorites));
+                updateStats();
+            };
+
+            window.toggleNote = (id, btn) => {
+                const area = document.getElementById(`note-area-${id}`);
+                area.classList.toggle('hidden');
+            };
+
+            window.saveNote = (id) => {
+                const area = document.getElementById(`note-area-${id}`);
+                const text = area.querySelector('textarea').value;
+                const btn = document.getElementById(id).querySelector('.fa-note-sticky').parentElement;
+
+                if (text.trim()) {
+                    state.notes[id] = text;
+                    btn.classList.add('text-blue');
+                    btn.querySelector('i').classList.replace('fa-regular', 'fa-solid');
+                } else {
+                    delete state.notes[id];
+                    btn.classList.remove('text-blue');
+                    btn.querySelector('i').classList.replace('fa-solid', 'fa-regular');
+                }
+                localStorage.setItem('dax_notes', JSON.stringify(state.notes));
+                updateStats();
+
+                // Visual feedback
+                const saveBtn = area.querySelector('button');
+                const originalText = saveBtn.innerText;
+                saveBtn.innerText = 'Guardado!';
+                saveBtn.classList.replace('btn-primary', 'btn-success'); // Assuming btn-success exists or use inline color
+                saveBtn.style.backgroundColor = 'var(--success)';
+
+                setTimeout(() => {
+                    saveBtn.innerText = originalText;
+                    saveBtn.style.backgroundColor = ''; // Reset to class
+                    saveBtn.classList.replace('btn-success', 'btn-primary');
+                    area.classList.add('hidden');
+                }, 1000);
+            };
+
+            window.copyCode = (btn) => {
+                const code = btn.closest('.code-block-wrapper').querySelector('code').innerText;
+                navigator.clipboard.writeText(code).then(() => {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Copiado';
+                    btn.classList.add('text-green');
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.classList.remove('text-green');
+                    }, 2000);
+                });
+            };
+
+            function updateStats() {
+                favCountEl.textContent = state.favorites.length;
+                noteCountEl.textContent = Object.keys(state.notes).length;
+            }
+
+            // --- Search & Filter Logic ---
+            searchInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                filterContent(term, currentLevelFilter);
+            });
+
+            let currentLevelFilter = 'all';
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update Active State
+                    filterBtns.forEach(b => {
+                        b.classList.remove('btn-primary');
+                        b.classList.add('btn-outline');
+                        // Remove color classes if any specific
+                    });
+                    btn.classList.remove('btn-outline');
+                    btn.classList.add('btn-primary');
+
+                    currentLevelFilter = btn.getAttribute('data-filter');
+                    filterContent(searchInput.value.toLowerCase(), currentLevelFilter);
+                });
+            });
+
+            function filterContent(term, level) {
+                const items = document.querySelectorAll('.search-item');
+                let hasVisibleItems = false;
+
+                items.forEach(item => {
+                    const keywords = item.getAttribute('data-keywords') || '';
+                    const titleEl = item.querySelector('h3, h4');
+                    const title = titleEl ? titleEl.innerText.toLowerCase() : '';
+
+                    const matchesSearch = term === '' || keywords.includes(term) || title.includes(term);
+
+                    // Level Check
+                    // We need to find the parent section's level
+                    const section = item.closest('section');
+                    const sectionLevel = section ? section.getAttribute('data-level') : '';
+
+                    const matchesLevel = level === 'all' || sectionLevel === level;
+
+                    if (matchesSearch && matchesLevel) {
+                        item.classList.remove('hidden');
+                        hasVisibleItems = true;
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+
+                // Hide empty sections
+                sections.forEach(section => {
+                    if (section.id === 'hero' || section.id === 'dashboards' || section.id === 'referencia') return; // Always show these or handle differently?
+
+                    // Actually, if we filter by level, we might want to hide sections that don't match the level completely.
+                    // But the item loop handles hiding items. If all items are hidden, hide section.
+
+                    const visibleItems = section.querySelectorAll('.search-item:not(.hidden)');
+                    const hasItems = section.querySelectorAll('.search-item').length > 0;
+
+                    if (hasItems && visibleItems.length === 0) {
+                        section.classList.add('hidden');
+                    } else {
+                        // Check level filter for section itself
+                        const sectionLevel = section.getAttribute('data-level');
+                        if (level !== 'all' && sectionLevel && sectionLevel !== level) {
+                            section.classList.add('hidden');
+                        } else {
+                            section.classList.remove('hidden');
+                        }
+                    }
+                });
+            }
+
+            // --- Scroll Spy ---
+            function setupScrollSpy() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const id = entry.target.getAttribute('id');
+                            navLinks.forEach(link => {
+                                link.classList.remove('active');
+                                if (link.getAttribute('href') === `#${id}`) {
+                                    link.classList.add('active');
+                                }
+                            });
+                        }
+                    });
+                }, { threshold: 0.2 });
+
+                sections.forEach(section => observer.observe(section));
+            }
+
+            // Init Highlight.js
+            if (window.hljs) hljs.highlightAll();
+        });
+    </script>
+</body>
+</html>
